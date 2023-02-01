@@ -1,0 +1,15 @@
+black
+flake8
+isort
+numpy
+Pillow
+scikit-learn
+scipy
+tabulate
+tqdm
+yacs
+future
+tensorboard
+timm
+opencv-python
+einops

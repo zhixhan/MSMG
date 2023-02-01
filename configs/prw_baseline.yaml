@@ -1,0 +1,31 @@
+OUTPUT_DIR: "./logs/prws_softmax_10boxreg/transhead_hat3_3da_sum_share_patches141428"
+INPUT:
+  DATASET: "PRW"
+  DATA_ROOT: "data/PRW"
+  BATCH_SIZE_TRAIN: 3
+SOLVER:
+  MAX_EPOCHS: 16
+  LR_DECAY_MILESTONES: [10, 14]
+  BASE_LR: 0.0018
+  LW_BOX_REID_1ST: 1.0
+  LW_BOX_REID_2ND: 1.0
+  LW_BOX_REID_3RD: 1.0
+MODEL:
+  ROI_HEAD:
+    TRANSFORMERHEAD_DEPTH: 1
+    TRANSFORMERHEAD_FEATNAME: ["feat_res2", "feat_res3", "feat_res4"]
+    NAE_FEATNAME: ["part_trans_0", "part_trans_1", "part_trans_2", "part_trans_3", "part_trans_4", "part_trans_5", "part_trans_6", "trans_feat"]
+    TRANSFORMERHEAD_INCHANNELS: [256, 512, 1024]
+    TRANSFORMERHEAD_OUTPUT_DIM: [2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048]
+    TRANSFORMERHEAD_SPACIAL_SIZE: [28, 28, 28]
+    TRANSFORMERHEAD_DIM: 512
+    NAE_INDV_DIM: [19, 19, 18, 18, 18, 18, 18, 128]
+    BATCH_SIZE_TRAIN: 80
+    POS_FRAC_TRAIN: 1.0
+
+  LOSS:
+    LUT_SIZE: 483
+    CQ_SIZE: 500
+    USE_SOFTMAX: True
+EVAL_USE_CBGM: False
+EVAL_USE_CACHE: False
