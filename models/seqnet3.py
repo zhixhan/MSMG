@@ -48,8 +48,8 @@ class SeqNet(nn.Module):
             nms_thresh=cfg.MODEL.RPN.NMS_THRESH,
         )
         #box_head = TransformerHead(feature_names=cfg.MODEL.ROI_HEAD.TRANSFORMERHEAD_FEATNAME, in_channels=cfg.MODEL.ROI_HEAD.TRANSFORMERHEAD_INCHANNELS, depth=cfg.MODEL.ROI_HEAD.TRANSFORMERHEAD_DEPTH, embed_dim=cfg.MODEL.ROI_HEAD.TRANSFORMERHEAD_DIM, spacial_size=cfg.MODEL.ROI_HEAD.TRANSFORMERHEAD_SPACIAL_SIZE)
-        faster_rcnn_predictor = FastRCNNPredictor(2048, 2)
-        reid_head = HATHead(feature_names=cfg.MODEL.ROI_HEAD.TRANSFORMERHEAD_FEATNAME, in_channels=cfg.MODEL.ROI_HEAD.TRANSFORMERHEAD_INCHANNELS, depth=cfg.MODEL.ROI_HEAD.TRANSFORMERHEAD_DEPTH, embed_dim=cfg.MODEL.ROI_HEAD.TRANSFORMERHEAD_DIM, spacial_size=cfg.MODEL.ROI_HEAD.TRANSFORMERHEAD_SPACIAL_SIZE)
+        faster_rcnn_predictor = FastRCNNPredictor(box_head.out_channels[1], 2)
+        reid_head = HATHead(feature_names=cfg.MODEL.ROI_HEAD.TRANSFORMERHEAD_FEATNAME, in_channels=cfg.MODEL.ROI_HEAD.TRANSFORMERHEAD_INCHANNELS, out_channels=cfg.MODEL.ROI_HEAD.TRANSFORMERHEAD_OUTPUT_DIM, depth=cfg.MODEL.ROI_HEAD.TRANSFORMERHEAD_DEPTH, embed_dim=cfg.MODEL.ROI_HEAD.TRANSFORMERHEAD_DIM, spacial_size=cfg.MODEL.ROI_HEAD.TRANSFORMERHEAD_SPACIAL_SIZE)
         box_roi_pool = nn.ModuleDict([
             [fname, MultiScaleRoIAlign(
                 featmap_names=[fname], output_size=cfg.MODEL.ROI_HEAD.TRANSFORMERHEAD_SPACIAL_SIZE[j], sampling_ratio=2

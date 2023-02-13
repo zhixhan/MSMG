@@ -488,7 +488,7 @@ def eval_search_prw(
     for i, k in enumerate(topk):
         print("  top-{:2d} = {:.2%}".format(k, accs[i]))
 
-    write_json(ret, "vis/draw_dad1.json")
+    write_json(ret, "logs/vis/msmg.json")
 
     ret["mAP"] = np.mean(aps)
     ret["accs"] = accs

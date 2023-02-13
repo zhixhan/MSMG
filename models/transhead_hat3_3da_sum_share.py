@@ -181,21 +181,21 @@ class DecoderBlock(nn.Module):
     
 class HATHead(nn.Module):
 
-    def __init__(self, feature_names=["feat_res2", "feat_res3", "feat_res4"], in_channels=[256, 512, 1024], depth=2, num_heads=8, embed_dim=384, sr_ratios=[1, 1, 1], spacial_size=14, part_feats=7):
+    def __init__(self, feature_names=["feat_res2", "feat_res3", "feat_res4"], in_channels=[256, 512, 1024], out_channels=[2048, 2048, 2048], depth=2, num_heads=8, embed_dim=384, sr_ratios=[1, 1, 1], spacial_size=14, part_feats=7):
         super(HATHead, self).__init__()
         self.proj = nn.ModuleDict([
-            ['feat_res2', nn.Conv2d(256, embed_dim , kernel_size=3, stride=3, bias=False)],
-            ['feat_res3', nn.Conv2d(512, embed_dim // 2, kernel_size=2, stride=2, bias=False)],
-            ['feat_res4', nn.Conv2d(1024, embed_dim // 2, kernel_size=1, stride=1, bias=False)]
+            ['feat_res2', nn.Conv2d(in_channels[0], embed_dim , kernel_size=3, stride=3, bias=False)],
+            ['feat_res3', nn.Conv2d(in_channels[1], embed_dim // 2, kernel_size=2, stride=2, bias=False)],
+            ['feat_res4', nn.Conv2d(in_channels[2], embed_dim // 2, kernel_size=1, stride=1, bias=False)]
             ])
         self.bridge = nn.ModuleDict([
             ['feat_res2', nn.Conv2d(embed_dim, embed_dim // 2, kernel_size=1, stride=1, bias=False)],
             ['feat_res3', nn.Conv2d(embed_dim, embed_dim // 2, kernel_size=1, stride=1, bias=False)],
             ])
         self.output = nn.ModuleDict([
-            ['part_feat2', nn.Linear(embed_dim, 2048)],
-            ['part_feat3', nn.Linear(embed_dim, 2048)],
-            ['part_feat4', nn.Linear(embed_dim, 2048)]
+            ['part_feat2', nn.Linear(embed_dim, out_channels[0])],
+            ['part_feat3', nn.Linear(embed_dim, out_channels[1])],
+            ['part_feat4', nn.Linear(embed_dim, out_channels[2])]
             ])
         
         #assert len(sr_ratios) == depth, " Error spacial reduction size"

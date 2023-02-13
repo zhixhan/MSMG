@@ -143,14 +143,15 @@ class Block(nn.Module):
     
 class HATHead(nn.Module):
 
-    def __init__(self, feature_names=["feat_res2", "feat_res3", "feat_res4"], in_channels=[256, 512, 1024], depth=2, num_heads=8, embed_dim=384, sr_ratios=[1, 1, 1], spacial_size=14, part_feats=7):
+    def __init__(self, feature_names=["feat_res2", "feat_res3", "feat_res4"], in_channels=[256, 512, 1024], out_channels=[2048, 2048, 2048], depth=2, num_heads=8, embed_dim=384, sr_ratios=[1, 1, 1], spacial_size=14, part_feats=7):
         super(HATHead, self).__init__()
-        self.proj = nn.ModuleDict([
-            ['feat_res4', nn.Conv2d(1024, embed_dim, kernel_size=1, stride=1, bias=False)]
-            ])
-        self.output = nn.ModuleDict([
-            ['feat_res4', nn.Conv2d(embed_dim, 2048, kernel_size=1, stride=1, bias=False)]
-            ])
+        for fname, in_channel, out_channel in zip(feature_names, in_channels, out_channels):
+            self.proj = nn.ModuleDict([
+                [fname, nn.Conv2d(in_channel, embed_dim, kernel_size=1, stride=1, bias=False)]
+                ])
+            self.output = nn.ModuleDict([
+                ['feat_res4', nn.Conv2d(embed_dim, out_channel, kernel_size=1, stride=1, bias=False)]
+                ])
         
         #assert len(sr_ratios) == depth, " Error spacial reduction size"
         self.blocks = nn.ModuleList([Block(

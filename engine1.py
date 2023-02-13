@@ -38,7 +38,7 @@ def train_one_epoch(cfg, model, optimizer, data_loader, device, epoch, tfboard=N
 
         loss_dict, feats_reid, targets_reid = model(images, targets, epoch=epoch)
         if cfg.MODEL.LOSS.USE_SOFTMAX:
-            softmax_loss = cfg.SOLVER.LW_BOX_REID_1ST * softmax_criterion(feats_reid, targets_reid)
+            softmax_loss = cfg.SOLVER.LW_BOX_SOFTMAX_1ST * softmax_criterion(feats_reid, targets_reid)
             loss_dict.update(loss_box_softmax=softmax_loss)
         losses = sum(loss for loss in loss_dict.values())
 
@@ -83,7 +83,7 @@ def evaluate_performance(
     """
     model.eval()
     if use_cache:
-        eval_cache = torch.load("data/eval_cache/eval_cache_decoder_decoupleall.pth")
+        eval_cache = torch.load("data/eval_cache/eval_cache.pth")
         gallery_dets = eval_cache["gallery_dets"]
         gallery_feats = eval_cache["gallery_feats"]
         query_dets = eval_cache["query_dets"]

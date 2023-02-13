@@ -97,16 +97,16 @@ def main(args):
         train_one_epoch(cfg, model, optimizer, train_loader, device, epoch, tfboard, softmax_criterion=softmax_criterion)
         lr_scheduler.step()
 
+        save_on_master(
+            {
+                "model": model.state_dict(),
+                "optimizer": optimizer.state_dict(),
+                "lr_scheduler": lr_scheduler.state_dict(),
+                "epoch": epoch,
+            },
+            osp.join(output_dir, f"epoch_{epoch}.pth"),
+        )
         if epoch >= cfg.SOLVER.MAX_EPOCHS - 6:
-            save_on_master(
-                {
-                    "model": model.state_dict(),
-                    "optimizer": optimizer.state_dict(),
-                    "lr_scheduler": lr_scheduler.state_dict(),
-                    "epoch": epoch,
-                },
-                osp.join(output_dir, f"epoch_{epoch}.pth"),
-            )
             
             evaluate_performance(
                 model,

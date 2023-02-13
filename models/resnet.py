@@ -59,7 +59,6 @@ class RegHead(nn.Sequential):
 
 def build_resnet(name="resnet50", pretrained=True):
     resnet = torchvision.models.resnet.__dict__[name](pretrained=pretrained)
-
     # freeze layers
     resnet.conv1.weight.requires_grad_(False)
     resnet.bn1.weight.requires_grad_(False)
